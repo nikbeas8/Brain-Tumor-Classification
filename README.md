@@ -11,7 +11,7 @@
 
 ## Dataset
 Download dataset from Kaggle:
-(Add your dataset link here)
+https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset
 
 Place it inside:
 dataset/
