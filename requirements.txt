@@ -1,0 +1,16 @@
+# Core Machine Learning
+tensorflow>=2.12.0
+keras>=2.12.0
+
+# Data Manipulation & Processing
+numpy
+pandas
+opencv-python
+
+# Visualization
+matplotlib
+seaborn
+
+# Explainable AI & Utilities
+scikit-learn
+scipy
