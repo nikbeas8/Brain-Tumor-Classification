@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Tumor Classification</title>
+  <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+  <div class="page-glow glow-a"></div>
+  <div class="page-glow glow-b"></div>
+  <header class="hero">
+    <div class="hero-text">
+      <span class="tag">Deep Learning + MRI Analysis</span>
+      <h1>Brain Tumor Classification System</h1>
+      <p>
+        Upload a brain MRI scan to get a tumor prediction, confidence score,
+        class probabilities, and a Grad-CAM explanation for tumor cases.
+      </p>
+      <div class="hero-actions">
+        <a href="#upload-section" class="btn primary">Upload MRI</a>
+        <a href="#features" class="btn secondary">View Features</a>
+      </div>
+    </div>
+
+    <aside class="hero-card">
+      <h2>Project Overview</h2>
+      <div class="overview-item">
+        <span>Classes</span>
+        <strong>Glioma, Meningioma, Pituitary, No Tumor</strong>
+      </div>
+      <div class="overview-item">
+        <span>Model Input</span>
+        <strong>224 x 224 MRI Image</strong>
+      </div>
+      <div class="overview-item">
+        <span>Output</span>
+        <strong>Prediction, Confidence, Probabilities, Grad-CAM</strong>
+      </div>
+    </aside>
+  </header>
+
+  <main>
+    <section class="upload-section" id="upload-section">
+      <div class="section-title">
+        <h2>Upload and Analyze MRI Scan</h2>
+        <p>Select an MRI image and send it to the Flask prediction backend.</p>
+      </div>
+
+      <div class="upload-grid">
+        <section class="panel upload-card">
+          <div class="drop-area" id="dropArea">
+            <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" hidden>
+            <img id="previewImage" class="preview-image hidden" alt="MRI preview">
+            <div id="uploadContent">
+              <div class="upload-icon">+</div>
+              <h3>Drop MRI image here</h3>
+              <p>or click to browse from your computer</p>
+              <small>PNG, JPG, JPEG, or WEBP under 8 MB</small>
+            </div>
+          </div>
+
+          <div class="file-row">
+            <input type="text" id="fileName" value="No file selected" readonly>
+            <button class="btn primary" id="analyzeBtn" type="button" disabled>Analyze</button>
+          </div>
+        </section>
+
+        <section class="result-stack">
+          <div class="panel result-card">
+            <h2>Prediction Result</h2>
+            <div class="result-box">
+              <p class="label">Predicted Class</p>
+              <h3 id="predictionText">Waiting for analysis...</h3>
+              <p class="confidence-text">Confidence: <span id="confidenceText">0%</span></p>
+            </div>
+
+            <div class="probability-box">
+              <h3>Class Probabilities</h3>
+              <div class="probability-item">
+                <div class="probability-top"><span>Glioma</span><span id="gliomaValue">0%</span></div>
+                <div class="bar"><div id="gliomaBar"></div></div>
+              </div>
+              <div class="probability-item">
+                <div class="probability-top"><span>Meningioma</span><span id="meningiomaValue">0%</span></div>
+                <div class="bar"><div id="meningiomaBar"></div></div>
+              </div>
+              <div class="probability-item">
+                <div class="probability-top"><span>Pituitary</span><span id="pituitaryValue">0%</span></div>
+                <div class="bar"><div id="pituitaryBar"></div></div>
+              </div>
+              <div class="probability-item">
+                <div class="probability-top"><span>No Tumor</span><span id="noTumorValue">0%</span></div>
+                <div class="bar"><div id="noTumorBar"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel gradcam-card">
+            <div class="mini-title">
+              <h2>Grad-CAM Visualization</h2>
+              <p id="gradcamMessage">Tumor heatmap appears here after analysis.</p>
+            </div>
+            <img id="gradcamImage" alt="Grad-CAM heatmap preview">
+            <div class="gradcam-placeholder" id="gradcamPlaceholder">
+              <h3>No visualization yet</h3>
+              <p>Shown only for tumor predictions.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="section-title">
+        <h2>Project Features</h2>
+        <p>Clean output for demos, viva, and project presentation.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="panel feature-card">
+          <h3>Fast Prediction</h3>
+          <p>Upload an MRI image and get a tumor classification result.</p>
+        </article>
+        <article class="panel feature-card">
+          <h3>Confidence Score</h3>
+          <p>Displays the model confidence for the predicted class.</p>
+        </article>
+        <article class="panel feature-card">
+          <h3>Class Probabilities</h3>
+          <p>Shows probabilities for all four classes in a visual format.</p>
+        </article>
+        <article class="panel feature-card">
+          <h3>Explainable AI</h3>
+          <p>Grad-CAM highlights image regions used by the model for tumor cases.</p>
+        </article>
+      </div>
+    </section>
+
+    <p class="disclaimer">
+      This project is for educational and research use only. It is not a substitute for professional medical diagnosis.
+    </p>
+  </main>
+
+  <footer class="footer">
+    <p>Brain Tumor Classification Project</p>
+  </footer>
+
+  <script src="../static/js/script.js"></script>
+</body>
+</html>

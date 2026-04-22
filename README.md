@@ -1,138 +1,250 @@
-# 🧠 Brain Tumor Classification using Deep Learning with Explainable AI
+# Brain Tumor Classification Full-Stack AI App
 
-## Overview
+This project is a full-stack AI web application for classifying brain MRI images into four classes:
 
-This project focuses on automated brain tumor detection and classification from MRI scans using Deep Learning and Explainable AI (XAI) techniques.
-
-The model classifies MRI images into:
-
-- Glioma Tumor
-- Meningioma Tumor
-- Pituitary Tumor
+- Glioma
+- Meningioma
+- Pituitary
 - No Tumor
 
-Additionally, Grad-CAM visualization is used to highlight tumor regions, making the model interpretable and trustworthy.
+The backend uses a trained TensorFlow/Keras EfficientNetB0 model. The frontend provides a modern upload interface, prediction results, confidence scores, class probabilities, and Grad-CAM visualization for tumor predictions.
 
-## Dataset
-Download dataset from Kaggle:
-
-https://www.kaggle.com/datasets/deeppythonist/brain-tumor-mri-dataset
-
-Place it inside:
-```
-Brain-Tumor-Classification/dataset/
-```
-
-## Problem Statement
-
-Manual detection of brain tumors from MRI scans is:
-- Time-consuming
-- Prone to human error
-- Requires expert radiologists
-
-This project aims to:
-- Automate tumor classification
-- Improve accuracy
-- Provide visual explanations for predictions
+> Disclaimer: This project is for educational and research use only. It is not a substitute for professional medical diagnosis.
 
 ## Features
-- Multi-class tumor classification
-- High accuracy deep learning model
-- Transfer Learning (EfficientNetB0)
-- Grad-CAM for Explainability
-- Optimized for GPU (Google Colab - T4)
-- Clean and modular code structure
 
-## Tech Stack
-- Python
-- TensorFlow / Keras
-- OpenCV
-- NumPy / Pandas
-- Matplotlib / Seaborn
-- Grad-CAM (Explainable AI)
+- Flask backend for model inference
+- HTML, CSS, and JavaScript frontend
+- MRI image upload with preview
+- Four-class prediction
+- Confidence score and class probabilities
+- Grad-CAM heatmap overlay for tumor classes
+- No Grad-CAM generated for `notumor`
+- Clean backend/frontend project structure
+- Production runner support with Waitress
 
 ## Project Structure
+
 ```text
-Brain-Tumor-Classification/
+brain-tumor-classification/
 │
-├── dataset/
-│   ├── train/
-│   ├── test/
+├── backend/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── config.py
+│   └── services/
+│       ├── __init__.py
+│       ├── gradcam_service.py
+│       └── prediction_service.py
+│
+├── frontend/
+│   ├── templates/
+│   │   └── index.html
+│   └── static/
+│       ├── css/
+│       │   └── styles.css
+│       └── js/
+│           └── script.js
 │
 ├── models/
 │   └── best_model.keras
 │
-├── main.ipynb
-├── grad_cam.ipynb
-├── predict.ipynb
-|
+├── notebooks/
+│   ├── main.ipynb
+│   ├── predict.ipynb
+│   └── grad_cam.ipynb
+│
+├── dataset/
+│   ├── train/
+│   └── test/
+│
+├── run.py
 ├── requirements.txt
 └── README.md
 ```
 
-## Model Details
-- Architecture: EfficientNetB0 (Transfer Learning)
-- Input Size: 224 × 224 × 3
-- Optimizer: Adam
-- Loss Function: Categorical Crossentropy
-- Callbacks Used:
-    - EarlyStopping
-    - ReduceLROnPlateau
-    - ModelCheckpoint
+## Tech Stack
 
-## Performance
-- Training Accuracy: 98.78%
-- Validation Accuracy: 98.25%
+- Python
+- Flask
+- TensorFlow / Keras
+- OpenCV
+- NumPy
+- Pillow
+- HTML
+- CSS
+- JavaScript
 
-## How to Run
-### 1️⃣ Clone Repository
+## Setup
+
+### 1. Create a virtual environment
+
 ```bash
-git clone https://github.com/nikbeas8/Brain-Tumor-Classification.git
-cd Brain-Tumor-Classification
+python -m venv .venv
 ```
 
-### 2️⃣ Install Dependencies
+### 2. Activate the environment
+
+Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+macOS/Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
-### 3️⃣ Train Model
 
-- Open **main.ipynb** in Google Colab or VS code. (I suggest Google Colab)
-- Then run all the cells
+### 4. Add the trained model
 
-### 4️⃣ Test Model
+Make sure the model exists here:
 
-- Open **predict.ipynb** in Google Colab or VS code.
-- Then run all the cells
+```text
+models/best_model.keras
+```
 
-## Grad-CAM (Explainable AI)
+The current model file is around 66 MB. GitHub can store it, but GitHub may warn for files over 50 MB. For long-term use, Git LFS is recommended for model files.
 
-Grad-CAM helps visualize where the model is focusing in the MRI image.
+## Run Locally
 
-### Run Grad-CAM
+```bash
+python run.py
+```
 
-- Open **grad_cam.ipynb** in Google Colab or VS code.
-- Then run all the cells
+Open:
 
-## Output:
-- Heatmap showing tumor region
-- Overlay on original MRI image
+```text
+http://127.0.0.1:5000
+```
 
-## Sample Output
+If port `5000` is already busy, run with another port:
 
-<img width="1484" height="767" alt="image" src="https://github.com/user-attachments/assets/7f00f60b-cca6-40ce-8cad-8c70157b6a66" />
+Windows PowerShell:
 
+```powershell
+$env:PORT="5050"; python run.py
+```
 
-## Future Improvements
-- Web-based interface (Frontend Integration)
-- 3D Brain Visualization
-- Real-time hospital deployment
+macOS/Linux:
 
-## ⚠️ Disclaimer
+```bash
+PORT=5050 python run.py
+```
 
-This project is for educational and research purposes only.
-It should not be used as a substitute for professional medical diagnosis.
+## Production Run
 
-## If you like this project
+For a simple production-style local run:
 
-Give it a ⭐ on GitHub — it really helps!
+```bash
+waitress-serve --host=0.0.0.0 --port=5000 run:app
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5000
+```
+
+## API Endpoints
+
+### `GET /`
+
+Serves the web interface.
+
+### `GET /health`
+
+Returns backend health status.
+
+Example response:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+### `POST /predict`
+
+Accepts one uploaded MRI image using form field name `image`.
+
+Supported file types:
+
+- JPG
+- JPEG
+- PNG
+- WEBP
+
+Example response:
+
+```json
+{
+  "prediction": "meningioma",
+  "confidence": 1.0,
+  "percentage": 100.0,
+  "grad_cam": "data:image/png;base64,...",
+  "probabilities": [
+    {
+      "label": "glioma",
+      "confidence": 0.0,
+      "percentage": 0.0
+    }
+  ]
+}
+```
+
+For `notumor` predictions, `grad_cam` is returned as `null`.
+
+## Model Details
+
+- Architecture: EfficientNetB0 transfer learning model
+- Input size: `224 x 224 x 3`
+- Classes: `glioma`, `meningioma`, `notumor`, `pituitary`
+- Saved model path: `models/best_model.keras`
+
+## Grad-CAM Behavior
+
+Grad-CAM is generated only for tumor predictions:
+
+- `glioma`
+- `meningioma`
+- `pituitary`
+
+Grad-CAM is skipped for:
+
+- `notumor`
+
+This keeps the UI clinically clearer and avoids showing a tumor heatmap when the model predicts no tumor.
+
+## Dataset
+
+Dataset source:
+
+```text
+https://www.kaggle.com/datasets/deeppythonist/brain-tumor-mri-dataset
+```
+
+Expected dataset location:
+
+```text
+dataset/
+```
+
+The dataset is used for training and evaluation notebooks. It is not required for running prediction if `models/best_model.keras` already exists.
+
+## Notebooks
+
+The notebooks are kept for experimentation and training:
+
+- `notebooks/main.ipynb`: training workflow
+- `notebooks/predict.ipynb`: notebook-based prediction testing
+- `notebooks/grad_cam.ipynb`: original Grad-CAM experimentation
+
+The production app logic now lives in `backend/`.
