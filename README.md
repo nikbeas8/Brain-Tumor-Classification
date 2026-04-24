@@ -153,6 +153,49 @@ Then open:
 http://127.0.0.1:5000
 ```
 
+## Deploy on Render
+
+This repository is prepared for Render deployment with:
+
+- `render.yaml`
+- `Procfile`
+- `.python-version`
+
+Recommended service settings:
+
+- Build command: `pip install -r requirements.txt`
+- Start command: `waitress-serve --host=0.0.0.0 --port=$PORT run:app`
+- Health check path: `/health`
+
+## Demo Deployment Notes
+
+If you deploy this project now, treat it as a demo only:
+
+- Keep the educational-use disclaimer visible
+- Do not present predictions as medical diagnosis
+- Expect weaker reliability on unseen real-world MRI images
+- Treat Grad-CAM as an illustrative explanation, not proof
+
+## Quick Evaluation
+
+Run this before demo deployment:
+
+```bash
+python scripts/evaluate_demo.py
+```
+
+This script performs:
+
+- a labeled spot-check on `dataset/test`
+- an optional evaluation on files inside `web_samples/`
+- a Markdown report export to `reports/demo_evaluation_report.md`
+
+Example with a larger sample:
+
+```bash
+python scripts/evaluate_demo.py --limit-per-class 25
+```
+
 ## API Endpoints
 
 ### `GET /`

@@ -44,7 +44,6 @@
     <section class="upload-section" id="upload-section">
       <div class="section-title">
         <h2>Upload and Analyze MRI Scan</h2>
-        <p>Select an MRI image and send it to the Flask prediction backend.</p>
       </div>
 
       <div class="upload-grid">
@@ -70,9 +69,12 @@
           <div class="panel result-card">
             <h2>Prediction Result</h2>
             <div class="result-box">
-              <p class="label">Predicted Class</p>
+              <p class="label">AI Estimate</p>
               <h3 id="predictionText">Waiting for analysis...</h3>
-              <p class="confidence-text">Confidence: <span id="confidenceText">0%</span></p>
+              <div class="result-metrics">
+                <p class="confidence-text">Confidence: <span id="confidenceText">0%</span></p>
+                <p class="metric-pill">Inference Time: <span id="inferenceTimeText">--</span></p>
+              </div>
             </div>
 
             <div class="probability-box">
@@ -99,15 +101,60 @@
           <div class="panel gradcam-card">
             <div class="mini-title">
               <h2>Grad-CAM Visualization</h2>
-              <p id="gradcamMessage">Tumor heatmap appears here after analysis.</p>
+              <p id="gradcamMessage">Illustrative heatmap appears here after analysis.</p>
             </div>
             <img id="gradcamImage" alt="Grad-CAM heatmap preview">
             <div class="gradcam-placeholder" id="gradcamPlaceholder">
               <h3>No visualization yet</h3>
-              <p>Shown only for tumor predictions.</p>
+              <p>Shown only for tumor predictions and should not be treated as proof.</p>
             </div>
           </div>
         </section>
+      </div>
+    </section>
+
+    <section class="insights-section">
+      <div class="insights-stack">
+        <div class="panel insight-card">
+        <div class="card-heading">
+          <p class="eyebrow">Clinical Context</p>
+          <h3 id="contextTitle">Awaiting result</h3>
+        </div>
+        <p class="insight-copy" id="contextDefinition">
+          Upload an MRI image to view a short explanation for the AI estimate.
+        </p>
+        <div class="info-list">
+          <div class="info-item">
+            <span>Suggested specialist</span>
+            <strong id="specialistText">Neurologist / Neurosurgeon</strong>
+          </div>
+          <div class="info-item">
+            <span>Recommended next step</span>
+            <strong id="nextStepText">Correlate with radiology review and clinical history.</strong>
+          </div>
+        </div>
+        </div>
+
+        <div class="panel insight-card">
+          <div class="card-heading">
+            <p class="eyebrow">Technical Details</p>
+            <h3>Model and dataset information</h3>
+          </div>
+          <div class="tech-list">
+            <div class="info-item">
+              <span>Architecture</span>
+              <strong id="architectureText">EfficientNetB0 - A highly efficient, lightweight CNN model that balances network depth, width, and resolution using a compound scaling strategy.</strong>
+            </div>
+            <div class="info-item">
+              <span>Performance</span>
+              <strong id="performanceText">Training completed with 95% accuracy | Validation accuracy: 94%</strong>
+            </div>
+            <div class="info-item">
+              <span>Dataset</span>
+              <strong id="datasetText">Kaggle - https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset</strong>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -138,7 +185,7 @@
     </section>
 
     <p class="disclaimer">
-      This project is for educational and research use only. It is not a substitute for professional medical diagnosis.
+      ⚠️This demo is for educational and research use only. Predictions and Grad-CAM overlays can be wrong and are not a substitute for professional medical diagnosis.⚠️
     </p>
   </main>
 

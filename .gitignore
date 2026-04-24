@@ -1,4 +1,6 @@
 dataset/
+reports/
+web_samples/
 *.pt
 __pycache__/
 *.log

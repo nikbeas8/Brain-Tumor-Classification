@@ -16,6 +16,14 @@ def image_to_data_url(image):
     return f"data:image/png;base64,{encoded}"
 
 
+def normalize_heatmap(heatmap):
+    heatmap = np.nan_to_num(heatmap, nan=0.0, posinf=0.0, neginf=0.0)
+    max_value = float(np.max(heatmap)) if heatmap.size else 0.0
+    if max_value <= 0.0:
+        return np.zeros_like(heatmap, dtype="float32")
+    return (heatmap / max_value).astype("float32")
+
+
 def build_grad_cam(model, image, image_array, intensity=0.6):
     base_model = model.get_layer("efficientnetb0")
     target_layer = base_model.get_layer("top_activation")
@@ -43,11 +51,14 @@ def build_grad_cam(model, image, image_array, intensity=0.6):
     conv_outputs = conv_outputs[0]
     heatmap = conv_outputs @ pooled_grads[..., tf.newaxis]
     heatmap = tf.squeeze(heatmap)
-    heatmap = tf.maximum(heatmap, 0) / (tf.math.reduce_max(heatmap) + 1e-10)
-    heatmap = heatmap.numpy().astype("float32")
+    heatmap = tf.maximum(heatmap, 0).numpy().astype("float32")
+    heatmap = normalize_heatmap(heatmap)
 
     heatmap_resized = cv2.resize(heatmap, IMG_SIZE)
     heatmap_resized = cv2.GaussianBlur(heatmap_resized, (7, 7), 0)
+    heatmap_resized = np.clip(
+        np.nan_to_num(heatmap_resized, nan=0.0, posinf=0.0, neginf=0.0), 0.0, 1.0
+    )
     heatmap_uint8 = np.uint8(255 * heatmap_resized)
     heatmap_color = cv2.applyColorMap(heatmap_uint8, cv2.COLORMAP_JET)
     heatmap_color = cv2.cvtColor(heatmap_color, cv2.COLOR_BGR2RGB)
