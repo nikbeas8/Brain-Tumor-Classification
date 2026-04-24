@@ -13,11 +13,8 @@ const contextDefinition = document.getElementById("contextDefinition");
 const specialistText = document.getElementById("specialistText");
 const nextStepText = document.getElementById("nextStepText");
 const architectureText = document.getElementById("architectureText");
-const modelVersionText = document.getElementById("modelVersionText");
-const inputSizeText = document.getElementById("inputSizeText");
+const performanceText = document.getElementById("performanceText");
 const datasetText = document.getElementById("datasetText");
-const datasetSourceText = document.getElementById("datasetSourceText");
-const trainingNoteText = document.getElementById("trainingNoteText");
 
 const gliomaValue = document.getElementById("gliomaValue");
 const meningiomaValue = document.getElementById("meningiomaValue");
@@ -163,9 +160,26 @@ analyzeBtn.addEventListener("click", async () => {
       body: formData,
     });
 
-    const data = await response.json();
+    const responseText = await response.text();
+    let data = null;
+
+    if (responseText) {
+      try {
+        data = JSON.parse(responseText);
+      } catch (_error) {
+        data = null;
+      }
+    }
+
     if (!response.ok) {
-      throw new Error(data.error || "Prediction failed.");
+      throw new Error(
+        data?.error ||
+          `Prediction failed (${response.status}). The server did not return a valid JSON response.`
+      );
+    }
+
+    if (!data) {
+      throw new Error("Prediction failed. The server returned an empty or invalid response.");
     }
 
     predictionText.classList.remove("error-text");
@@ -239,15 +253,24 @@ function updateClinicalContext(label) {
 }
 
 function updateTechnicalDetails(details) {
-  architectureText.textContent = details?.model_name || "EfficientNetB0";
-  modelVersionText.textContent = details?.model_version || "best_model.keras";
-  inputSizeText.textContent = details?.input_size || "224 x 224 x 3";
-  datasetText.textContent = details?.dataset_name || "Brain Tumor MRI Dataset";
-  datasetSourceText.textContent = details?.dataset_source || "Project dataset";
+  if (architectureText) {
+    architectureText.textContent =
+      details?.model_name ||
+      "EfficientNetB0 - A highly efficient, lightweight CNN model that balances network depth, width, and resolution using a compound scaling strategy.";
+  }
 
-  const datasetUsage = details?.dataset_usage_note ? `${details.dataset_usage_note} ` : "";
-  const trainingNote = details?.training_metrics_note || "Training metrics are documented in the project notebooks.";
-  trainingNoteText.textContent = `${datasetUsage}${trainingNote}`.trim();
+  if (performanceText) {
+    const note =
+      details?.training_metrics_note ||
+      "Training metrics are documented in the project notebooks.";
+    performanceText.textContent = note;
+  }
+
+  if (datasetText) {
+    const datasetName = details?.dataset_name || "Brain Tumor MRI Dataset";
+    const datasetSource = details?.dataset_source || "Project dataset";
+    datasetText.textContent = `${datasetName} | ${datasetSource}`;
+  }
 }
 
 function formatLabel(label) {
