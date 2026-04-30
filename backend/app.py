@@ -1,8 +1,13 @@
 from flask import Flask, jsonify, render_template, request
 from werkzeug.exceptions import RequestEntityTooLarge
 
-from backend.config import ALLOWED_EXTENSIONS, FRONTEND_DIR, MAX_CONTENT_LENGTH
-from backend.services import predict_mri
+from backend.config import (
+    ALLOWED_EXTENSIONS,
+    FRONTEND_DIR,
+    MAX_CONTENT_LENGTH,
+    WARM_MODEL_ON_STARTUP,
+)
+from backend.services import predict_mri, warm_model
 
 
 def create_app():
@@ -42,6 +47,9 @@ def create_app():
     @app.errorhandler(RequestEntityTooLarge)
     def handle_file_too_large(_error):
         return jsonify({"error": "Image is too large. Please upload a file under 8 MB."}), 413
+
+    if WARM_MODEL_ON_STARTUP:
+        warm_model()
 
     return app
 

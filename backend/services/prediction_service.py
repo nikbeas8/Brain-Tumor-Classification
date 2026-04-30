@@ -31,6 +31,12 @@ def get_model():
     return model
 
 
+def warm_model():
+    loaded_model = get_model()
+    dummy_input = tf.zeros((1, IMG_SIZE[0], IMG_SIZE[1], 3), dtype=tf.float32)
+    loaded_model.predict(dummy_input, verbose=0)
+
+
 def prepare_image(file_storage):
     image_bytes = file_storage.read()
     image = Image.open(io.BytesIO(image_bytes)).convert("RGB")

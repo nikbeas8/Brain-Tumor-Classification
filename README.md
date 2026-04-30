@@ -164,8 +164,11 @@ This repository is prepared for Render deployment with:
 Recommended service settings:
 
 - Build command: `pip install -r requirements.txt`
-- Start command: `waitress-serve --host=0.0.0.0 --port=$PORT run:app`
+- Start command: `waitress-serve --threads=1 --host=0.0.0.0 --port=$PORT run:app`
 - Health check path: `/health`
+
+For Render, keep `WARM_MODEL_ON_STARTUP=1` enabled so the TensorFlow model loads
+before the first prediction request instead of timing out behind the proxy.
 
 ## Demo Deployment Notes
 

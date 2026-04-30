@@ -4,6 +4,15 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: waitress-serve --host=0.0.0.0 --port=$PORT run:app
+    startCommand: waitress-serve --threads=1 --host=0.0.0.0 --port=$PORT run:app
     healthCheckPath: /health
     autoDeploy: true
+    envVars:
+      - key: WARM_MODEL_ON_STARTUP
+        value: "1"
+      - key: TF_CPP_MIN_LOG_LEVEL
+        value: "2"
+      - key: TF_NUM_INTEROP_THREADS
+        value: "1"
+      - key: TF_NUM_INTRAOP_THREADS
+        value: "1"

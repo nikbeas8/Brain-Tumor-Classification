@@ -1,15 +1,14 @@
 # Web backend
-Flask>=3.0.0
-waitress>=3.0.0
+Flask==3.0.3
+waitress==3.0.0
 
 # Model inference
-tensorflow>=2.12.0
-keras>=2.12.0
-numpy>=1.23.0
-opencv-python>=4.8.0
-Pillow>=10.0.0
+tensorflow-cpu==2.16.1
+numpy>=1.26.0,<2.0.0
+opencv-python-headless==4.10.0.84
+Pillow==10.4.0
 
-# Notebook training and evaluation
+# Local evaluation and notebooks
 pandas>=2.0.0
 matplotlib>=3.7.0
 seaborn>=0.12.0
